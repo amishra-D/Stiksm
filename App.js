@@ -8,6 +8,9 @@ import Signup from './screens/Signup.js'
 import HomePage from './screens/HomePage.js'
 import Navigation from './screens/Navigation.js';
 import  Quote  from './screens/Quote.js';
+import  ChatUI  from './screens/ChatUI.js';
+
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -19,6 +22,7 @@ export default function App() {
         <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }}  />
         <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: false }}  />
         <Stack.Screen name="Quote" component={Quote} options={{ headerShown: false }}  />
+          <Stack.Screen name="Chat" component={ChatUI} options={{ headerShown: false }}  />
       </Stack.Navigator>
       <Navigation></Navigation>
     </NavigationContainer>

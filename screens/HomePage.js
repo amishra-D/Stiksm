@@ -51,7 +51,6 @@ export default function HomePage() {
   return (
     <SafeAreaProvider>
       <SafeAreaView className="flex-1 bg-neutral-950" edges={['top']} style={{ paddingTop: StatusBar.currentHeight }}>
-        {/* Header */}
         <View className="p-6 flex-row items-center justify-between border-b border-neutral-800">
           <Text className="text-white text-2xl font-light tracking-tight">Quote Collections</Text>
           <TouchableOpacity className="p-2">
@@ -59,7 +58,6 @@ export default function HomePage() {
           </TouchableOpacity>
         </View>
 
-        {/* Category Cards */}
         <ScrollView 
           className="px-5 pb-8 mt-1"
           showsVerticalScrollIndicator={false}
