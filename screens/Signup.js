@@ -7,7 +7,6 @@ export default function Signup() {
   return (
     <SafeAreaProvider>
     <View className="flex-1 w-full items-center bg-[#f8f9fa]">
-      {/* Header with Gradient */}
       <LinearGradient
         colors={['#ddff00', '#a2d400']}
         start={{ x: 0, y: 0 }}
@@ -22,11 +21,9 @@ export default function Signup() {
         <Text className="text-lg text-gray-700 mt-2">Join the ultimate sports experience</Text>
       </LinearGradient>
 
-      {/* Signup Form */}
       <View className="w-full h-2/3 bg-black rounded-t-[40px] px-8 pt-12 -mt-10 shadow-lg">
         <Text className="text-3xl font-bold mb-6 text-center text-gray-400">Create Account</Text>
 
-        {/* Name Input */}
         <View className="flex-row items-center w-full h-14 px-4 mb-4 bg-gray-100 rounded-xl">
           <MaterialIcons name="person" size={22} color="#6b7280" />
           <TextInput
@@ -37,7 +34,6 @@ export default function Signup() {
           />
         </View>
 
-        {/* Email Input */}
         <View className="flex-row items-center w-full h-14 px-4 mb-4 bg-gray-100 rounded-xl">
           <MaterialIcons name="email" size={22} color="#6b7280" />
           <TextInput
@@ -49,7 +45,6 @@ export default function Signup() {
           />
         </View>
 
-        {/* Password Input */}
         <View className="flex-row items-center w-full h-14 px-4 mb-4 bg-gray-100 rounded-xl">
           <FontAwesome name="lock" size={22} color="#6b7280" />
           <TextInput
@@ -60,7 +55,6 @@ export default function Signup() {
           />
         </View>
 
-        {/* Confirm Password Input */}
         <View className="flex-row items-center w-full h-14 px-4 mb-6 bg-gray-100 rounded-xl">
           <FontAwesome name="lock" size={22} color="#6b7280" />
           <TextInput
@@ -71,7 +65,6 @@ export default function Signup() {
           />
         </View>
 
-        {/* Signup Button */}
         <Pressable 
           className="w-full h-14 bg-[#ddff00] rounded-xl items-center justify-center shadow-sm mb-5"
           style={({ pressed }) => ({
@@ -82,7 +75,6 @@ export default function Signup() {
           <Text className="text-black text-lg font-bold">Sign Up</Text>
         </Pressable>
 
-        {/* Terms and Conditions */}
         <Text className="text-gray-500 text-xs text-center mb-6">
           By signing up, you agree to our Terms of Service and Privacy Policy
         </Text>
@@ -93,7 +85,6 @@ export default function Signup() {
           <View className="flex-1 h-px bg-gray-200" />
         </View>
 
-        {/* Social Signup */}
         <View className="flex-row justify-center space-x-4">
           <Pressable className="w-12 h-12 bg-gray-100 rounded-full items-center justify-center">
             <FontAwesome name="google" size={20} color="#DB4437" />
@@ -106,7 +97,6 @@ export default function Signup() {
           </Pressable>
         </View>
 
-        {/* Login Link */}
         <View className="flex-row justify-center mt-6">
           <Text className="text-gray-500">Already have an account? </Text>
           <Pressable>

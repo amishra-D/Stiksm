@@ -1,6 +1,6 @@
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient'; // ✅ Import this
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Login () {
   return (

@@ -1,23 +1,50 @@
-import React, { Component } from 'react'
-import { ScrollView, StatusBar, View, Text, TouchableOpacity, Image } from 'react-native';
+import * as React from 'react';
+import { View, useWindowDimensions } from 'react-native';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import HomePage from './HomePage';
+import SettingsPage from './SettingsPage';
+import Chatsec from './Chatsec';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+
+const renderScene = SceneMap({
+  first: HomePage,
+  second: Chatsec,
+  third: SettingsPage,
+});
+
+const routes = [
+  { key: 'first', title: 'Home',icon:<Feather name="home" color="#000" size={24} /> },
+  { key: 'second', title: 'Chat',icon:<MaterialCommunityIcons name="chat-outline" color="#000" size={24} /> },
+  { key: 'third', title: 'Settings',icon:<SimpleLineIcons name="settings" color="#000" size={24} /> },
+];
+
 export default function Navigation() {
-    return (
-      
-        <View className="bg-neutral-800 p-4 flex-row justify-around">
-          <TouchableOpacity className="items-center">
-            <Ionicons name="home" size={24} color="white" />
-            <Text className="text-white text-xs mt-1">Home</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="items-center">
-            <Ionicons name="star" size={24} color="gray" />
-            <Text className="text-gray-400 text-xs mt-1">Favorites</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="items-center">
-            <Ionicons name="settings" size={24} color="gray" />
-            <Text className="text-gray-400 text-xs mt-1">Settings</Text>
-          </TouchableOpacity>
-        </View>
-    )
-  }
+  const layout = useWindowDimensions();
+  const [index, setIndex] = React.useState(0);
+
+  const renderTabBar = (props) => (
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: 'white' }}
+      style={{ backgroundColor: 'black' }}
+      labelStyle={{ color: 'white' }}
+    />
+  );
+
+  return (
+<SafeAreaProvider>
+      <SafeAreaView className="flex-1 bg-black py-5" edges={['right', 'left']}>
+    <TabView
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      initialLayout={{ width: layout.width }}
+      renderTabBar={renderTabBar}
+    />
+    </SafeAreaView>
+        </SafeAreaProvider>
+  );
+}

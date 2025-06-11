@@ -12,10 +12,9 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-
-const API_KEY = "AIzaSyC1JNXkeNAM01sWKScft6be1ZmLUznzWlg";
-
+import axios from 'axios';
+import * as Animatable from 'react-native-animatable';
+import Loader from '../Components/Loader';
 export default function Quote() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -25,44 +24,74 @@ export default function Quote() {
   const [quotes, setQuotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+const parseQuotes = (text) => {
+  const cleanText = text.replace(/^[^"]*?(?=\*\*|["A-Za-z])/g, '').trim();
+
+  let quotes = [];
+
+  if (cleanText.includes('||')) {
+    quotes = cleanText.split('||').map(q =>
+      q.replace(/\*\*/g, '').replace(/^"+|"+$/g, '').trim()
+    );
+  } else {
+    quotes = cleanText
+      .split(/\n+/)
+      .map(q => q.replace(/\*\*/g, '').replace(/^"+|"+$/g, '').trim())
+      .filter(q => q.length > 0);
+  }
+
+  return quotes;
+};
+
 
   const fetchQuotes = async () => {
     try {
       setLoading(true);
       setError(null);
 
-      const genAI = new GoogleGenerativeAI(API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+const prompt = `Respond with exactly 4 one-line quotes in the style of ${categoryTitle.replace(' Quotes', '')}. No introductions, no formatting, no asterisks. Separate each quote using double pipe characters (||). Example: Quote 1 || Quote 2 || Quote 3 || Quote 4`;
 
-      const prompt = `Generate 4 short, single-line quotes in the style of ${categoryTitle.replace(' Quotes', '')}. Separate them with "||"`;
+     const response = await axios.post(
+  'https://openrouter.ai/api/v1/chat/completions',
+  {
+    model: 'meta-llama/llama-3-8b-instruct',
+    messages: [
+  {
+    role: 'system',
+    content: `You are a quote generator. Only output 4 one-line quotes separated by double pipe characters (||). Do not include any headings, explanations, or markdown.`,
+  },
+  {
+    role: 'user',
+    content: prompt,
+  },
+],
+    max_tokens: 100,
+    temperature: 1.0,
+  },
+  {
+    headers: {
+      Authorization: 'Bearer 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', // your actual key
+      'Content-Type': 'application/json',
+    },
+  }
+);
+      const rawText = response.data.choices[0].message.content;
 
-      const result = await model.generateContent({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: prompt }],
-          },
-        ],
-      });
+const quotesArray = parseQuotes(rawText);
 
-      const response = await result.response;
-      const text = response.text();
+if (!quotesArray.length) {
+  throw new Error('No valid quotes returned');
+}
+setQuotes(quotesArray);
 
-      const quotesArray = text.split("||").map(q => q.trim()).filter(q => q.length > 0);
-
-      if (!quotesArray.length) {
-        throw new Error("No quotes returned");
-      }
-
-      setQuotes(quotesArray);
     } catch (err) {
-      console.error("Error fetching quotes:", err);
-      setError("You're out of free quota or the model is unavailable. Try again later.");
+      console.error('OpenRouter error:', err.response?.data || err.message);
+      setError("You're out of quota or the model failed. Showing fallback quotes.");
       setQuotes([
-        "Sample quote 1",
-        "Sample quote 2",
-        "Sample quote 3",
-        "Sample quote 4"
+        "I don't follow trends, I set them.",
+        "Confidence isn't optional, it's required.",
+        "Be the headline, not the footnote.",
+        "Speak like the world listens."
       ]);
     } finally {
       setLoading(false);
@@ -86,7 +115,7 @@ export default function Quote() {
     return (
       <SafeAreaProvider>
         <SafeAreaView className="flex-1 bg-neutral-950 justify-center items-center">
-          <ActivityIndicator size="large" color="#a3a3a3" />
+<Loader/>
         </SafeAreaView>
       </SafeAreaProvider>
     );
@@ -117,7 +146,7 @@ export default function Quote() {
           >
             {loading ? (
               <View className="flex-1 justify-center items-center">
-                <ActivityIndicator color="#a3a3a3" />
+<Loader/>
               </View>
             ) : error ? (
               <Text className="text-neutral-300">{error}</Text>
@@ -167,15 +196,15 @@ export default function Quote() {
               <Text className="text-neutral-400 mb-4">
                 More from {categoryTitle.replace(' Quotes', '')}
               </Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false} className="gap-3">
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {quotes.slice(1).map((item, index) => (
-                  <TouchableOpacity
+                  <Animatable.View 
+                   animation="slideInRight"  easing="ease-in-out"  duration={400} delay={index * 20}
                     key={index}
-                    className="bg-neutral-900 p-4 rounded-lg w-64 border border-neutral-800"
-                    activeOpacity={0.8}
+                    className="bg-neutral-900 p-4 rounded-lg w-64 border border-neutral-800 mr-3"
                   >
                     <Text className="text-neutral-300 italic">"{item}"</Text>
-                  </TouchableOpacity>
+                  </Animatable.View>
                 ))}
               </ScrollView>
             </View>

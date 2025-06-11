@@ -6,6 +6,10 @@ export default function Home({ navigation }) {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text style={{ fontSize: 24 }}>Home Screen</Text>
 
+ 
+      <Pressable onPress={() => navigation.navigate('App')} style={{ marginTop: 20 }}>
+        <Text style={{ fontSize: 18, color: 'blue' }}>Go to homepage</Text>
+      </Pressable>
       <Pressable onPress={() => navigation.navigate('Login')} style={{ marginTop: 20 }}>
         <Text style={{ fontSize: 18, color: 'blue' }}>Go to Login</Text>
       </Pressable>
